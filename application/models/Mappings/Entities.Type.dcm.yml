@@ -1,0 +1,52 @@
+Entities\Type:
+  type: entity
+  table: types
+  uniqueConstraints:
+    name_index:
+      columns:
+        - name
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+      nullable: false
+    active:
+      type: boolean
+      default: true
+      nullable: false
+    created:
+      type: datetime
+      nullable: false
+      column: dtcreated
+      columnDefinition: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    deleted:
+      type: datetime
+      nullable: true
+      column: dtdeleted
+  oneToOne:
+    deletedUser:
+      targetEntity: User
+      joinColumn:
+        name: deleted_user_id
+        referencedColumnName: id
+  manyToMany:
+    attachments:
+      targetEntity: Attachment
+      mappedBy: category
+  oneToMany:
+    children:
+      targetEntity: Type
+      mappedBy: parent
+  manyToOne:
+    parent:
+      targetEntity: Type
+      inversedBy: children
+  options:
+    type: INNODB
+    collate: utf8_unicode_ci
+    charset: utf8

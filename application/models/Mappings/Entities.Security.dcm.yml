@@ -1,0 +1,64 @@
+Entities\Security:
+  type: entity
+  table: security
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+      nullable: false
+    active:
+      type: boolean
+      default: false
+      nullable: false
+    created:
+      type: datetime
+      nullable: false
+      column: dtcreated
+      columnDefinition: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    modified:
+      type: datetime
+      nullable: true
+      column: dtmodified
+    deleted:
+      type: datetime
+      nullable: true
+      column: dtdeleted
+  manyToMany:
+    members:
+      targetEntity: User
+      mappedBy: security
+  oneToOne:
+    createUser:
+      targetEntity: User
+      joinColumn:
+        name: create_user_id
+        referencedColumnName: id
+  oneToOne:
+    modifyUser:
+      targetEntity: User
+      joinColumn:
+        name: modify_user_id
+        referencedColumnName: id
+  oneToOne:
+    deleteUser:
+      targetEntity: User
+      joinColumn:
+        name: delete_user_id
+        referencedColumnName: id
+  oneToMany:
+    children:
+      targetEntity: Security
+      mappedBy: parent
+  manyToOne:
+    parent:
+      targetEntity: Security
+      inversedBy: children
+  options:
+    type: INNODB
+    collate: utf8_unicode_ci
+    charset: utf8

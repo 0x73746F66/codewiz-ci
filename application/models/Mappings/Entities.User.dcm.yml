@@ -1,0 +1,92 @@
+Entities\User:
+  type: entity
+  table: users
+  uniqueConstraints:
+    email_index:
+      columns:
+        - email
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    password:
+      type: string
+      length: 32
+      nullable: false
+    firstName:
+      type: string
+      length: 255
+      nullable: false
+      column: first_name
+    lastName:
+      type: string
+      length: 255
+      nullable: false
+      column: last_name
+    email:
+      type: string
+      length: 255
+      nullable: false
+    url:
+      type: string
+      length: 255
+      nullable: true
+    active:
+      type: boolean
+      default: false
+      nullable: false
+    created:
+      type: datetime
+      nullable: false
+      column: dtcreated
+      columnDefinition: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    modified:
+      type: datetime
+      nullable: true
+      column: dtmodified
+    deleted:
+      type: datetime
+      nullable: true
+      column: dtdeleted
+  oneToOne:
+    createUser:
+      targetEntity: User
+      joinColumn:
+        name: create_user_id
+        referencedColumnName: id
+  oneToOne:
+    modifyUser:
+      targetEntity: User
+      joinColumn:
+        name: modify_user_id
+        referencedColumnName: id
+  oneToOne:
+    deleteUser:
+      targetEntity: User
+      joinColumn:
+        name: delete_user_id
+        referencedColumnName: id
+  oneToMany:
+    attachments:
+      targetEntity: Attachment
+      mappedBy: owner
+      orderBy:
+        created: DESC
+  manyToMany:
+    security:
+      targetEntity: Security
+      inversedBy: members
+      joinTable:
+        name: security_members
+        joinColumns:
+          member_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          security_id:
+            referencedColumnName: id
+  options:
+    type: INNODB
+    collate: utf8_unicode_ci
+    charset: utf8
