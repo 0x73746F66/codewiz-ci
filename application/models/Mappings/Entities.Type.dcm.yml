@@ -1,6 +1,7 @@
 Entities\Type:
   type: entity
   table: types
+  lifecycleCallbacks: {  }
   uniqueConstraints:
     name_index:
       columns:

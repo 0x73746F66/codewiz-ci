@@ -1,18 +1,18 @@
-Entities\Attachment:
+Entities\Instance:
   type: entity
-  table: attachments
+  table: instances
   lifecycleCallbacks: {  }
   uniqueConstraints:
-    url_index:
+    uri_index:
       columns:
-        - url
+        - uri
   fields:
     id:
       type: integer
       id: true
       generator:
         strategy: AUTO
-    url:
+    uri:
       type: string
       length: 255
       nullable: false
@@ -29,27 +29,24 @@ Entities\Attachment:
       type: datetime
       nullable: true
       column: dtdeleted
-  manyToMany:
-    category:
-      targetEntity: Type
-      inversedBy: attachments
-      joinTable:
-        name: categories_attachments
-        joinColumns:
-          category_id:
-            referencedColumnName: id
-        inverseJoinColumns:
-          attachment_id:
-            referencedColumnName: id
   manyToOne:
     user:
       targetEntity: User
-      inversedBy: attachments
+      inversedBy: instances
+  oneToMany:
+    posts:
+      targetEntity: Post
+      mappedBy: instances
   oneToOne:
-    deletedUser:
+    type:
+      targetEntity: Type
+      joinColumn:
+        name: type_id
+        referencedColumnName: id
+    deleteUser:
       targetEntity: User
       joinColumn:
-        name: deleted_user_id
+        name: delete_user_id
         referencedColumnName: id
   options:
     type: INNODB

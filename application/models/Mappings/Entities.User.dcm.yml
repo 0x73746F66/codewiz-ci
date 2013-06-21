@@ -1,6 +1,7 @@
 Entities\User:
   type: entity
   table: users
+  lifecycleCallbacks: {  }
   uniqueConstraints:
     email_index:
       columns:
@@ -29,7 +30,7 @@ Entities\User:
       type: string
       length: 255
       nullable: false
-    url:
+    about:
       type: string
       length: 255
       nullable: true
@@ -50,38 +51,42 @@ Entities\User:
       type: datetime
       nullable: true
       column: dtdeleted
+  oneToMany:
+    instances:
+      targetEntity: Instance
+      mappedBy: user
+    posts:
+      targetEntity: Post
+      mappedBy: user
+    attachments:
+      targetEntity: Attachment
+      mappedBy: user
+    interactions:
+      targetEntity: Interaction
+      mappedBy: user
   oneToOne:
     createUser:
       targetEntity: User
       joinColumn:
         name: create_user_id
         referencedColumnName: id
-  oneToOne:
     modifyUser:
       targetEntity: User
       joinColumn:
         name: modify_user_id
         referencedColumnName: id
-  oneToOne:
     deleteUser:
       targetEntity: User
       joinColumn:
         name: delete_user_id
         referencedColumnName: id
-  oneToMany:
-    attachments:
-      targetEntity: Attachment
-      mappedBy: owner
-      orderBy:
-        created: DESC
   manyToMany:
     security:
       targetEntity: Security
-      inversedBy: members
       joinTable:
-        name: security_members
+        name: permissions
         joinColumns:
-          member_id:
+          user_id:
             referencedColumnName: id
         inverseJoinColumns:
           security_id:
