@@ -2,6 +2,7 @@ Entities\Interaction:
   type: entity
   table: interactions
   lifecycleCallbacks: {  }
+  repositoryClass: Repositories\Interaction
   fields:
     id:
       type: integer

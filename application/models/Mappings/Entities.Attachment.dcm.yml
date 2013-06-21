@@ -2,6 +2,7 @@ Entities\Attachment:
   type: entity
   table: attachments
   lifecycleCallbacks: {  }
+  repositoryClass: Repositories\Attachment
   uniqueConstraints:
     url_index:
       columns:

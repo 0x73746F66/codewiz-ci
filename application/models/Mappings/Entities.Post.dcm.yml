@@ -2,6 +2,7 @@ Entities\Post:
   type: entity
   table: posts
   lifecycleCallbacks: {  }
+  repositoryClass: Repositories\Post
   fields:
     id:
       type: integer

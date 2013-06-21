@@ -2,6 +2,7 @@ Entities\Instance:
   type: entity
   table: instances
   lifecycleCallbacks: {  }
+  repositoryClass: Repositories\Instance
   uniqueConstraints:
     uri_index:
       columns:

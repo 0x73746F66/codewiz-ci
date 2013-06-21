@@ -2,6 +2,7 @@ Entities\Security:
   type: entity
   table: security
   lifecycleCallbacks: {  }
+  repositoryClass: Repositories\Security
   fields:
     id:
       type: integer
