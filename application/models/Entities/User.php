@@ -158,6 +158,16 @@ class User
     }
 
     /**
+     * Get fullName
+     *
+     * @return string 
+     */
+    public function getFullName()
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+
+    /**
      * Get firstName
      *
      * @return string 
