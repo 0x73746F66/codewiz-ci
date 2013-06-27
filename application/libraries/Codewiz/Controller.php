@@ -1,16 +1,20 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Controller
+ * Codewiz_Controller
  *
- * Codewiz.biz CI_Controller extended-ingly
+ * Codewiz.biz CI_Controller influenced by ZF auto-loading views directory structure while retaining CI's functionality.
+ * Includes many features such as a request object holding all arguments sent, controller and method names, http verb, and if ssl.
+ * Easily add remote or raw CSS and JS to header or end of html.
  *
  * @package        	Codewiz_Controller
  * @subpackage    	Libraries
  * @category    	Libraries
- * @author        	Christopher Langton
- * @license             
- * @link		http://github.com/chrisdlangton/Codewiz_CI/
+ * @author        	Christopher Langton <chris@codewiz.biz>
+ * @license         GPLv3
+ * @link			http://github.com/chrisdlangton/Codewiz_Controller/
+ * @link			http://codewiz.biz/
+ * @link			http://chrisdlangton.com/
  * @version 		0.0.1
  */
 class Codewiz_Controller extends CI_Controller
@@ -49,11 +53,12 @@ class Codewiz_Controller extends CI_Controller
      * @var array
      */
     private $reserved = array(
-            "remoteCss",
-            "remoteJs",
             "jsHeader",
             "jsFooter",
+            "remoteJsHeader",
+            "remoteJsFooter",
             "css",
+            "remoteCss",
         );
 
     /**
@@ -91,68 +96,11 @@ class Codewiz_Controller extends CI_Controller
     /*
      * Init
      *
-     * Controllers can extend init to ba called directly after __construct
+     * Controllers can extend init to be called directly after __construct
      */
     public function init()
     {
         
-    }
-
-    /*
-     * CI Calendar Template
-     *
-     * @param bool $big Use the small or large calendar
-     * @return string CI Calendar Template
-     */
-    public function ciCalendarTemplate()
-    {
-        $config['day_type'] = 'long'; 
-        $this->addCss('.calendar {
-	font-family: Arial, Verdana, Sans-serif;
-	width: 100%;
-	min-width: 960px;
-	border-collapse: collapse;
-}
-.calendar tbody tr:first-child th {
-	color: #505050;
-	margin: 0 0 10px 0;
-}
-.day_header {
-	font-weight: normal;
-	text-align: center;
-	color: #757575;
-	font-size: 10px;
-}
-.calendar td {
-	width: 14%; /* Force all cells to be about the same width regardless of content */
-	border:1px solid #CCC;
-	height: 100px;
-	vertical-align: top;
-	font-size: 10px;
-	padding: 0;
-}
-.calendar td:hover {
-	background: #F3F3F3;
-}
-.day_listing {
-	display: block;
-	text-align: right;
-	font-size: 12px;
-	color: #2C2C2C;
-	padding: 5px 5px 0 0;
-}
-div.today {
-	background: #E9EFF7;
-	height: 100%;
-}'
-            );
-        $config['template'] = '{table_open}<table class="calendar">{/table_open}
-            {week_day_cell}<th class="day_header">{week_day}</th>{/week_day_cell}
-            {cal_cell_content}<span class="day_listing">{day}</span>&nbsp;{content}&nbsp;{/cal_cell_content}
-            {cal_cell_content_today}<div class="today"><span class="day_listing">{day}</span>&nbsp;{content}</div>{/cal_cell_content_today}
-            {cal_cell_no_content}<span class="day_listing">{day}</span>&nbsp;{/cal_cell_no_content}
-            {cal_cell_no_content_today}<div class="today"><span class="day_listing">{day}</span></div>{/cal_cell_no_content_today}';
-         return $config;
     }
 
     /**
@@ -209,14 +157,26 @@ div.today {
     }
 
     /**
-     * add a uri for a remote js resource
+     * add a uri for a remote js resource to the html head
      *
      * @param string $uri uri to remote js resource.
      * @return instance Controller
      */
-    public function addRemoteJs( $uri )
+    public function addRemoteJsHeader( $uri )
     {
-        $this->_data->layout['remoteJs'][] = $uri;
+        $this->_data->layout['remoteJsHeader'][] = $uri;
+        return $this;
+    }
+
+    /**
+     * add a uri for a remote js resource to the end of the html page
+     *
+     * @param string $uri uri to remote js resource.
+     * @return instance Controller
+     */
+    public function addRemoteJsFooter( $uri )
+    {
+        $this->_data->layout['remoteJsFooter'][] = $uri;
         return $this;
     }
 
@@ -359,4 +319,61 @@ div.today {
         }
         return $process ? $this->security->xss_clean($val) : $val;
     }
+    /*
+     * CI Calendar Template
+     *
+     * @param bool $big Use the small or large calendar
+     * @return string CI Calendar Template
+     */
+    public function ciCalendarTemplate()
+    {
+        $config['day_type'] = 'long'; 
+        $this->addCss('.calendar {
+	font-family: Arial, Verdana, Sans-serif;
+	width: 100%;
+	min-width: 960px;
+	border-collapse: collapse;
+}
+.calendar tbody tr:first-child th {
+	color: #505050;
+	margin: 0 0 10px 0;
+}
+.day_header {
+	font-weight: normal;
+	text-align: center;
+	color: #757575;
+	font-size: 10px;
+}
+.calendar td {
+	width: 14%; /* Force all cells to be about the same width regardless of content */
+	border:1px solid #CCC;
+	height: 100px;
+	vertical-align: top;
+	font-size: 10px;
+	padding: 0;
+}
+.calendar td:hover {
+	background: #F3F3F3;
+}
+.day_listing {
+	display: block;
+	text-align: right;
+	font-size: 12px;
+	color: #2C2C2C;
+	padding: 5px 5px 0 0;
+}
+div.today {
+	background: #E9EFF7;
+	height: 100%;
+}'
+            );
+        $config['template'] = '{table_open}<table class="calendar">{/table_open}
+            {week_day_cell}<th class="day_header">{week_day}</th>{/week_day_cell}
+            {cal_cell_content}<span class="day_listing">{day}</span>&nbsp;{content}&nbsp;{/cal_cell_content}
+            {cal_cell_content_today}<div class="today"><span class="day_listing">{day}</span>&nbsp;{content}</div>{/cal_cell_content_today}
+            {cal_cell_no_content}<span class="day_listing">{day}</span>&nbsp;{/cal_cell_no_content}
+            {cal_cell_no_content_today}<div class="today"><span class="day_listing">{day}</span></div>{/cal_cell_no_content_today}';
+         return $config;
+    }
+
 }

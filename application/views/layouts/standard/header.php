@@ -11,7 +11,7 @@
             <?= $style; ?>
 	</style>
 <? endforeach; ?>
-<? foreach ( $remoteJs as $script ) : ?>
+<? foreach ( $remoteJsHeader as $script ) : ?>
         <script type="text/javascript" charset="utf-8" src="<?= $script; ?>"></script>
 <? endforeach; ?>
 <? foreach ( $jsHeader as $script ) : ?>
