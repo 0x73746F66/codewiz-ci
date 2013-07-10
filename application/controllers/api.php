@@ -54,6 +54,18 @@ class Api extends REST_Controller
         $data = array('returned: '. $this->get('id'));
         $this->response($data);
     }
+    
+    function login_post()
+    {
+        $request = $this->post();
+        
+        if ( $request['email'] == "chrislangton84@gmail.com" && $request['password'] == "Scar1ett" ) 
+        $this->response( array( 'authenticated' => true ) , 202 );
+        else
+        $this->response( array( 'authenticated' => false ) , 401 );
+        
+    }
+    
 }
 
 /* End of file user.php */
